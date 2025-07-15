@@ -1,11 +1,24 @@
+import axios from 'axios';
 import React from 'react';
+import Swal from 'sweetalert2';
 
 const AddFoods = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         const formData = new FormData(e.target)
         const foods = Object.fromEntries(formData.entries())
-        console.log(foods)
+        axios.post('http://localhost:5000/foods', foods)
+            .then(res => {
+                if (res.data.insertedId) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Food has been added",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            })
 
     }
     return (
@@ -30,9 +43,19 @@ const AddFoods = () => {
                         required
                     />
 
+                    <input
+                        type="number"
+                        name="price"
+                        className="input input-bordered w-full"
+                        placeholder="Price"
+                        min="0"
+                        step="0.01"
+                        required
+                    />
+
                     <select
                         name="category"
-                        className="select select-bordered w-full"
+                        className="select select-bordered w-full col-span-2"
                         required
                     >
                         <option value="" disabled selected>Select Category</option>
@@ -40,7 +63,6 @@ const AddFoods = () => {
                         <option value="Dessert">Dessert</option>
                         <option value="Beverage">Beverage</option>
                     </select>
-
 
                     <textarea
                         name="description"
@@ -66,6 +88,7 @@ const AddFoods = () => {
                         Submit
                     </button>
                 </form>
+
             </div>
         </div>
     );

@@ -1,7 +1,21 @@
 import React from 'react';
+import useAuth from '../../hooks/useAuth';
+import axios from 'axios';
 
 const FoodCard = ({ food }) => {
-    const { foodName, category, quantity, description, foodImage } = food
+    const { _id, foodName, category, quantity, description, foodImage, price } = food
+    const { user } = useAuth()
+    const handleCart = () => {
+        const email = user.email
+        const foodId = _id
+        axios.post('http://localhost:5000/cart', {
+            foodId, email
+        })
+            .then(res => {
+                console.log(res.data)
+            })
+    }
+
     return (
         <div>
             <div className="card bg-base-100 shadow-xl h-full">
@@ -17,8 +31,12 @@ const FoodCard = ({ food }) => {
                         <p className='text-left'>({category})</p>
                     </div>
                     <p className='text-left'>{description}</p>
-                    <p className='text-sm'>Available: {quantity}</p>
-                    <button className="btn">Add to Cart</button>
+                    <div className='flex justify-between'>
+                        <p className='text-sm'>Available: {quantity}</p>
+                        <p className='text-sm'>Price: ${price}</p>
+
+                    </div>
+                    <button onClick={handleCart} className="btn">Add to Cart</button>
                 </div>
             </div>
         </div>

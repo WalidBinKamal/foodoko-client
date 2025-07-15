@@ -4,12 +4,14 @@ import useAuth from '../../hooks/useAuth';
 import Swal from 'sweetalert2';
 import { errorAlert } from '../../shared/alert';
 import Socials from '../../shared/Socials';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Registration = () => {
     const { user, createUser } = useAuth()
-    // const navigate = useNavigate()
-    // console.log(navigate)
+    const location = useLocation()
+    const navigate = useNavigate()
+    const from = location.state || '/'
     const handleRegistration = e => {
         e.preventDefault()
         const form = e.target
@@ -21,14 +23,21 @@ const Registration = () => {
         const user = { name, email, imageURL }
         if (password === confirmPassword) {
             createUser(email, password)
-                .then(res => {
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: "User has been Registered",
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                .then(() => {
+                    axios.post('http://localhost:5000/users', user)
+                        .then(res => {
+                            if(res.data.insertedId) {
+                                Swal.fire({
+                                    position: "center",
+                                    icon: "success",
+                                    title: "User has been Registered",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                                navigate(from)
+                            }
+                        }
+                        )
                 })
                 .catch(error => errorAlert(error.message))
         } else {
@@ -91,7 +100,7 @@ const Registration = () => {
                         </div>
 
                         <div className="flex justify-between items-center text-sm mt-1 px-1">
-                           <div></div>
+                            <div></div>
                             <p className="text-sm text-center mt-2">
                                 Already have an account? <Link to="/login" className="text-blue-600 hover:underline font-medium">Log In</Link>
                             </p>

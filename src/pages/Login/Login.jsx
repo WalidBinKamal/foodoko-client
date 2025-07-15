@@ -4,10 +4,13 @@ import useAuth from '../../hooks/useAuth';
 import Swal from 'sweetalert2';
 import { errorAlert } from '../../shared/alert';
 import Socials from '../../shared/Socials';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const { user, singinUser } = useAuth()
+    const location = useLocation()
+    const navigate = useNavigate()
+    const from = location.state || '/'
     const handleSignin = e => {
         e.preventDefault()
         const form = e.target
@@ -23,6 +26,7 @@ const Login = () => {
                     showConfirmButton: false,
                     timer: 1500
                 });
+                navigate(from)
             })
             .catch(error => errorAlert(error.message))
 

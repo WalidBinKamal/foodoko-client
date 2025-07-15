@@ -2,19 +2,24 @@ import React, { useState } from 'react';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import { errorAlert } from './alert';
 import useAuth from '../hooks/useAuth';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Socials = () => {
-    const { googleSignin } = useAuth(0)
+    const { googleSignin } = useAuth()
+    const location = useLocation()
+    const navigate = useNavigate()
+    const from = location.state || '/'
     const handleGoogle = () => {
         googleSignin()
-            .then(res => {
-                console.log(res.user)
+            .then((res) => {
+                // console.log(res)
+                navigate(from)
             })
             .catch(error => errorAlert(error.message))
     }
 
     const handleFacebook = () => {
-
+        alert('Under Development')
     }
     return (
         <div className="mt-6">

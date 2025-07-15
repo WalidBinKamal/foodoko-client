@@ -9,6 +9,7 @@ import Registration from "../pages/Registration/Registration";
 import ForgetPassword from "../pages/ForgetPassword/ForgetPassword";
 import ViewFoods from "../pages/ViewFoods/ViewFoods";
 import Cart from "../pages/Cart/Cart";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
     {
@@ -23,16 +24,16 @@ const router = createBrowserRouter([
             },
             {
                 path: '/viewFoods',
-                element: <ViewFoods></ViewFoods>,
+                element: <PrivateRoute><ViewFoods></ViewFoods></PrivateRoute>,
                 loader: () => fetch('http://localhost:5000/foods'),
             },
             {
                 path: '/addFood',
-                element: <AddFoods></AddFoods>,
+                element: <PrivateRoute><AddFoods></AddFoods></PrivateRoute>,
             },
             {
                 path: '/cart',
-                element: <Cart></Cart>,
+                element: <PrivateRoute><Cart></Cart></PrivateRoute>,
             },
             {
                 path: '/login',
